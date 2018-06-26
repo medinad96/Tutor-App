@@ -1,72 +1,106 @@
 # Tutor-App
 
-Models for actors
+A demo application showcasing various cloud native technologies that implement a system for Students and Tutors to connect.
 
-# Student:
+# Models
 
-Has…
+## Student
 
-Name - GET, PUT, POST, DELETE - Profile Service
+* Name
+* Phone Number
+* Email
+* School
+* Short description of the help they need
+* Classes they need help with
+* Places they prefer to meet
+* Schedule of times they want to receive help
 
-Phone Number - GET, PUT, POST, DELETE - Profile Service
+## Tutor
 
-Email - GET, PUT, POST, DELETE. - Profile Service
+* Name
+* Phone Number
+* Email
+* Place they prefer to meet
+* Classes or subjects they can provide help for
+* Schedule of times available
+* List of students who have looked at profile
 
-School - GET, PUT, POST, DELETE - Profile Service
+## Location
 
-Places they prefer to meet - GET, PUT, POST, DELETE - Profile service
+* Description
+* Address
 
-Classes they need help with - GET, PUT, POST, DELETE - Profile Service
+## Review
 
-Short description of the help they need - GET, PUT, POST, DELETE - Profile Service
+* Student
+* Tutor
+* Rating (1-5)
+* Comments
 
-Schedule of times they want to receive help - GET, PUT, POST, DELETE - Scheduling Service
+## Session
 
-Inbox - GET, PUT, POST, DELETE - Chat/Messaging service
+* Student
+* Tutor
+* Time
+* Location
 
-Able to search for any tutor on the application - GET - Search service
+## Message
 
-Required to have an account to be able to search - Search service
+* Sender
+* Time
+* Content
+* Read (true/false)
 
-Able to open a chat with a tutor from their profile, and from their reviews page - Chat service
+# Services
 
-Able to request an appointment from any tutor at an available time - GET, PUT, POST, DELETE - Scheduling service
+## Profile Service (requires authentication)
 
-Able to see review average rating of tutor and page with all of their reviews - GET - Review service
+* GET a profile
+* PUT a profile
+* DELETE a profile
 
-Able to create a review about a tutor they met with - Review service
+## Review Service
+
+* GET a review
+* POST a review
+* DELETE a review
+
+## Scheduling Service
+
+* GET a session by date range
+* POST a session
+* DELETE a session
+
+## Chat Service
+
+* GET all messages by time
+* GET all unread by time
+
+## Search Service
+
+* GET a Tutor by subject,availability,location
+* GET a Tutor by name
+* GET a Student by name
+* GET a Student by subject
+
+# Functional Requirements
+
+## For Students
+
+* Able to search for any tutor on the application
+* Required to have an account to be able to search
+* Able to open a chat with a tutor from their profile, and from their reviews page
+* Able to request an appointment from any tutor at an available time
+* Able to see review average rating of tutor and page with all of their reviews
+* Able to create a review about a tutor they met with
 
 
-# Tutor:
+## For Tutors
 
-Has…
-
-Name - GET, PUT, POST, DELETE - Profile Service
-
-Phone Number - GET, PUT, POST, DELETE - Profile Service
-
-Email - GET, PUT, POST, DELETE - Profile Service
-
-Place they prefer to meet - GET, PUT, POST, DELETE - Profile Service
-
-Classes or subjects they can provide help for - GET, PUT, POST, DELETE - Profile Service
-
-Schedule of times available - GET, PUT, POST, DELETE - Scheduling service
-
-List of students who have looked at profile - GET - Profile service
-
-Inbox - GET, PUT, POST, DELETE - Chat Service
-
-Able to search for any student on the application - GET - Search Service
-
-Able to open a chat with a tutor from their profile, and from their reviews page - Chat service
-
-Must be signed in to search for students - API Management, SSO , Search service
-
-Search by subject name or info for students needing help - GET, PUT, POST, DELETE - Search service
-
-Request to tutor student at an available time - GET, PUT, POST, DELETE - Scheduling service
-
-Able to see review average rating of student and page with all of their reviews - GET - review service
-
-Able to post a review about a student they met with before - GET, PUT, POST, DELETE - review service
+* Able to search for any student on the application
+* Able to open a chat with a tutor from their profile, and from their reviews page
+* Must be signed in to search for students
+* Search by subject name or info for students needing help
+* Request to tutor student at an available time
+* Able to see review average rating of student and page with all of their reviews
+* Able to post a review about a student they met with before
