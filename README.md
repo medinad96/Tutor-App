@@ -2,7 +2,7 @@
 
 Models for actors
 
-#Student:
+# Student:
 
 Has…
 
@@ -37,7 +37,7 @@ Able to see review average rating of tutor and page with all of their reviews - 
 Able to create a review about a tutor they met with - Review service
 
 
-#Tutor:
+# Tutor:
 
 Has…
 
