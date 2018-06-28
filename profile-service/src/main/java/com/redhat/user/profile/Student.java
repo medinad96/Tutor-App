@@ -1,15 +1,18 @@
 package com.redhat.user.profile;
 
 
-public class Student extends User<String> {
+public class Student extends User {
 
 
     private String classHelp;
     private String placeToMeet;
 
-    public Student (Long userId, String userType, String firstName, String lastName, Long phoneNumber, String email, String description, String placeToMeet, String classHelp){
-        super(userId,userType,firstName,lastName,phoneNumber,email,description);
-        this.userType = "Student";
+    public Student() {
+
+    }
+
+    public Student (String userId, String firstName, String lastName, String phoneNumber, String email, String description, String placeToMeet, String classHelp){
+        super(userId,"student",firstName,lastName,phoneNumber,email,description);
         this.placeToMeet = placeToMeet;
         this.classHelp = classHelp;
     }
@@ -18,8 +21,8 @@ public class Student extends User<String> {
     @Override
     public String toString() {
         return String.format(
-                "Student[userId=%d, userType='%s' firstName='%s', lastName='%s', phoneNumber='%d', email='%s', description='%s', placeToMeet='%s', classHelp='%s']",
-                userId, userType, firstName, lastName, phoneNumber,email,description, placeToMeet, classHelp);
+                "Tutor[userId=%s, userType='%s' firstName='%s', lastName='%s', phoneNumber='%s', email='%s', description='%s', placeToMeet='%s', classesToHelp='%s']",
+                getUserId(), getUserType(), getFirstName(), getLastName(), getPhoneNumber(),getEmail(),getDescription(), placeToMeet, classHelp);
     }
 
     public String getClassHelp() {

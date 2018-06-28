@@ -1,25 +1,22 @@
 package com.redhat.user.profile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 
-@Entity
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long userId;
+    private String userId;
     private String userType;
     private String firstName;
     private String lastName;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String email;
     private String description;
 
-    public User(Long userId, String userType, String firstName, String lastName, Long phoneNumber, String email, String description) {
+    public User() {
+
+    }
+    public User(String userId, String userType, String firstName, String lastName, String phoneNumber, String email, String description) {
         this.userId = userId;
         this.userType = userType;
         this.firstName = firstName;
@@ -36,7 +33,7 @@ public class User {
                 userId, firstName, lastName, phoneNumber,email,description);
     }
 
-    public String getUserId() {return userId}
+    public String getUserId() {return userId;}
 
     public String getUserType() {
         return userType;
@@ -58,7 +55,7 @@ public class User {
         return email;
     }
 
-    public String setUserId(String userId){this.userId = userId};
+    public void setUserId(String userId){this.userId = userId;};
 
     public void setUserType(String userType) {
         this.userType = userType;

@@ -1,51 +1,65 @@
 package com.redhat.user.rest;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import com.redhat.user.profile.Student;
+import com.redhat.user.profile.Tutor;
+import com.redhat.user.service.StudentRepository;
+import com.redhat.user.service.TutorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.redhat.coolstore.model.Product;
-import com.redhat.coolstore.service.CatalogService;
-
-@SessionScoped
-@Path("/users")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-
+@RestController("/services")
 public class UsersEndpoint implements Serializable {
 
-    @Inject
-    private ProfileService profileService;
+    @Autowired
+    private StudentRepository studentRepo;
+    @Autowired
+    private TutorRepository tutorRepo;
 
-    @GET
-    @Path("/")
-    public List<Students> listAllStudents() {
-        return profileService.getStudents();
+    @ResponseBody
+    @GetMapping("/students")
+    public ResponseEntity<List<Student>> listAllStudents() {
+        return new ResponseEntity<>(studentRepo.findAll(), HttpStatus.OK);
     }
 
-    @GET
-    @Path("/")
-    public List<Students> listAllTutors() {
-        return profileService.getTutors();
+    @ResponseBody
+    @GetMapping("/students/{id}")
+    public ResponseEntity<Student> getStudent(@PathVariable("id") String id) {
+        return new ResponseEntity<Student>(studentRepo.findOne(id), HttpStatus.OK);
     }
 
-    @POST
-    @Path("/")
-    public Response addStudent(Student student) {
-        profileService.addStudent(student);
-        return Response.ok().build();
+    @ResponseBody
+    @GetMapping("/tutors")
+    public ResponseEntity<List<Tutor>> listAllTutors() {
+        return new ResponseEntity<>(tutorRepo.findAll(), HttpStatus.OK);
     }
 
-    @POST
-    @Path("/")
-    public Response addTutor(Tutor tutor) {
-        profileService.addTutor(tutor);
-        return Response.ok().build();
+    @ResponseBody
+    @PostMapping("/students/{id}")
+    public ResponseEntity<Void> addStudent(@RequestBody Student student) {
+
+        Student newStudent = studentRepo.insert(student);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
+                "/{id}").buildAndExpand(newStudent.getUserId()).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @ResponseBody
+    @PostMapping("/tutors/{id}")
+    public ResponseEntity<Void> addTutor(@RequestBody Tutor tutor) {
+
+        Tutor newTutor = tutorRepo.insert(tutor);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
+                "/{id}").buildAndExpand(newTutor.getUserId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }
