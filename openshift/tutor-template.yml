@@ -1,0 +1,488 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: Red Hat TutorConnect
+    iconClass: icon-shadowman
+    tags: jboss,datagrid,spring,java
+  name: tutorconnect
+
+parameters:
+- name: JOLOKIA_PASSWORD
+  description: The password used for the Jolokia endpoint authentication
+  generate: expression
+  from: '[a-zA-Z0-9]{15}'
+  required: true
+- name: JOLOKIA_USER
+  description: The username used for the Jolokia endpoint authentication
+  value: jolokia
+- description: Maven mirror url. If nexus is deployed locally, use nexus url (e.g. http://nexus.ci:8081/content/groups/public/)
+  displayName: Maven mirror url
+  name: MAVEN_MIRROR_URL
+  required: false
+- description: MQ cluster password
+  from: '[a-zA-Z0-9]{8}'
+  generate: expression
+  name: MQ_CLUSTER_PASSWORD
+  required: true
+- description: JGroups cluster password
+  from: '[a-zA-Z0-9]{8}'
+  generate: expression
+  name: JGROUPS_CLUSTER_PASSWORD
+  required: true
+- description: Git source URI for application
+  name: GIT_URI
+  required: true
+  value: https://github.com/medinad96/Tutor-App
+- description: Git branch/tag reference
+  name: GIT_REF
+  value: master
+- description: MQ Broker username
+  name: BROKER_USERNAME
+  value: "broker-user"
+  required: true
+- description: MQ Broker password
+  name: BROKER_PASSWORD
+  value: "RedHat123!@#"
+  required: true
+- description: OpenShift load-balanced MQ Broker hostname
+  name: BROKER_HOSTNAME
+  value: "broker-hostname"
+  required: true
+- description: OpenShift load-balanced MQ Broker port
+  name: BROKER_PORT
+  value: "31883"
+  required: true
+- description: OpenShift load-balanced MQ Broker websockets port
+  name: BROKER_WS_PORT
+  value: "80"
+  required: true
+- description: Datastore username
+  name: DATASTORE_USERNAME
+  value: "foo"
+  required: true
+- description: Datastore password
+  name: DATASTORE_PASSWORD
+  value: "bar"
+  required: true
+- description: Datastore service hostname
+  name: DATASTORE_HOST
+  value: "datagrid-hotrod"
+  required: true
+- description: Datastore port
+  name: DATASTORE_PORT
+  value: "11333"
+  required: true
+- description: Datastore password
+  name: DATASTORE_CACHE
+  value: "student,tutor"
+  required: true
+# MongoDB
+- description: Database username
+  name: DATABASE_USERNAME
+  value: "foo"
+  required: true
+- description: Datastore password
+  name: DATABASE_PASSWORD
+  value: "bar"
+  required: true
+- description: Datastore Admin password
+  name: DATABASE_ADMIN_PASSWORD
+  value: "barbar"
+  required: true
+- description: Datastore service hostname
+  name: DATABASE_HOST
+  value: "datagrid-hotrod"
+  required: true
+- description: Datastore port
+  name: DATABASE_PORT
+  value: "11333"
+  required: true
+- description: Datastore password
+  name: DATABASE_NAME
+  value: "users"
+  required: true
+
+labels:
+  demo: TutorApp
+
+objects:
+
+#
+# Datastore (Red Hat Data Grid) Deployment Config
+#
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: datagrid
+      application: datagrid
+    name: datagrid
+  spec:
+    replicas: 1
+    selector:
+      deploymentConfig: datagrid
+    strategy:
+      recreateParams:
+        timeoutSeconds: 600
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          application: datagrid
+          deploymentConfig: datagrid
+        name: datagrid
+      spec:
+        containers:
+        - env:
+          - name: USERNAME
+            value: ${DATASTORE_USERNAME}
+          - name: PASSWORD
+            value: ${DATASTORE_PASSWORD}
+          - name: ADMIN_GROUP
+          - name: HOTROD_AUTHENTICATION
+          - name: CONTAINER_SECURITY_ROLE_MAPPER
+          - name: CONTAINER_SECURITY_ROLES
+          - name: JGROUPS_PING_PROTOCOL
+            value: openshift.DNS_PING
+          - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+            value: datagrid-ping
+          - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+          - name: INFINISPAN_CONNECTORS
+            value: hotrod,rest
+          - name: CACHE_NAMES
+            value: ${DATASTORE_CACHE}
+          - name: DATAVIRT_CACHE_NAMES
+          - name: ENCRYPTION_REQUIRE_SSL_CLIENT_AUTH
+          - name: HOTROD_SERVICE_NAME
+            value: ${DATASTORE_HOST}
+          - name: MEMCACHED_CACHE
+            value: memcache-default
+          - name: REST_SECURITY_DOMAIN
+          - name: JGROUPS_CLUSTER_PASSWORD
+            value: ${JGROUPS_CLUSTER_PASSWORD}
+          image: registry.access.redhat.com/jboss-datagrid-7/datagrid72-openshift:1.0
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - '-c'
+                - /opt/datagrid/bin/readinessProbe.sh
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - '-c'
+                - /opt/datagrid/bin/livenessProbe.sh
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: datagrid
+          ports:
+            - containerPort: 8778
+              name: jolokia
+              protocol: TCP
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 8888
+              name: ping
+              protocol: TCP
+            - containerPort: 11211
+              name: memcached
+              protocol: TCP
+            - containerPort: 11222
+              name: hotrod-internal
+              protocol: TCP
+            - containerPort: 11333
+              name: hotrod
+              protocol: TCP
+          resources:
+            limits:
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 60
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - datagrid
+        from:
+          kind: ImageStreamTag
+          name: jboss-datagrid72-openshift:1.0
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange
+  status: {}
+
+#
+# MongoDB
+#
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: mongodb
+    name: mongodb
+  spec:
+    replicas: 1
+    selector:
+      name: mongodb
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: mongodb
+      spec:
+        containers:
+          - env:
+              - name: MONGODB_USER
+                value: ${DATABASE_USERNAME}
+              - name: MONGODB_PASSWORD
+                value: ${DATABASE_PASSWORD}
+              - name: MONGODB_ADMIN_PASSWORD
+                value: ${DATABASE_ADMIN_PASSWORD}
+              - name: MONGODB_DATABASE
+                value: ${DATABASE_NAME}
+            image: registry.access.redhat.com/rhscl/mongodb-32-rhel7:3.2
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              tcpSocket:
+                port: 27017
+              timeoutSeconds: 1
+            name: mongodb
+            ports:
+              - containerPort: 27017
+                protocol: TCP
+            readinessProbe:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-i'
+                  - '-c'
+                  - >-
+                    mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p
+                    $MONGODB_PASSWORD --eval="quit()"
+              failureThreshold: 3
+              initialDelaySeconds: 3
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1
+            resources:
+              limits:
+                memory: 512Mi
+            securityContext:
+              capabilities: {}
+              privileged: false
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - mongodb
+          from:
+            kind: ImageStreamTag
+            name: 'mongodb:3.2'
+            namespace: openshift
+        type: ImageChange
+      - type: ConfigChange
+
+#
+# Tutor App Profile Imagestream
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: profile
+    labels:
+      app: profile
+  spec:
+    tags:
+    - name: latest
+
+#
+# Tutor App Profile Service Build
+#
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: profile
+    name: profile
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: profile:latest
+    runPolicy: Serial
+    source:
+      contextDir: profile-service
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_URI}
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'redhat-openjdk18-openshift:1.2'
+          namespace: openshift
+      type: Source
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+
+#
+# Tutor App Profile Service Deployment
+#
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+    labels:
+      app: profile
+    name: profile
+  spec:
+    replicas: 1
+    selector:
+      app: profile
+      deploymentconfig: profile
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: profile
+          deploymentconfig: profile
+      spec:
+        containers:
+          - env:
+              - name: JAVA_OPTIONS
+                value: '-Dspring.profiles.active=openshift'
+            image: profile
+            imagePullPolicy: Always
+            name: profile
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+              - containerPort: 8443
+                protocol: TCP
+              - containerPort: 8778
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - profile
+          from:
+            kind: ImageStreamTag
+            name: 'profile:latest'
+        type: ImageChange
+
+#
+# Services
+#
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: datagrid
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentConfig: datagrid
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: datagrid-hotrod
+  spec:
+    ports:
+    - port: 11333
+      protocol: TCP
+      targetPort: 11333
+    selector:
+      deploymentConfig: datagrid
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: datagrid-ping
+  spec:
+    ports:
+    - port: 8888
+      protocol: TCP
+      targetPort: 8888
+    selector:
+      deploymentConfig: datagrid
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: profile
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentConfig: profile
+    sessionAffinity: None
+    type: ClusterIP
+
+#
+# Routes
+#
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: datagrid
+  spec:
+    to:
+      kind: Service
+      name: datagrid
+

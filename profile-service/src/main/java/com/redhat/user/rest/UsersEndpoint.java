@@ -31,7 +31,7 @@ public class UsersEndpoint implements Serializable {
     @ResponseBody
     @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable("id") String id) {
-        return new ResponseEntity<Student>(studentRepo.findOne(id), HttpStatus.OK);
+        return new ResponseEntity<>(studentRepo.findByUserId(id), HttpStatus.OK);
     }
 
     @ResponseBody

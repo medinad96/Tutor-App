@@ -2,7 +2,9 @@ package com.redhat.user.profile;
 
 import org.springframework.data.annotation.Id;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     @Id
     private String userId;
