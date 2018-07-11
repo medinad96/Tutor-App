@@ -4,17 +4,14 @@ import com.redhat.user.profile.Student;
 import com.redhat.user.profile.Tutor;
 import com.redhat.user.service.StudentRepository;
 import com.redhat.user.service.TutorRepository;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @SpringBootApplication

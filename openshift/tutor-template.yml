@@ -241,15 +241,12 @@ objects:
     selector:
       name: mongodb
     strategy:
-      activeDeadlineSeconds: 21600
-      recreateParams:
-        timeoutSeconds: 600
-      resources: {}
       type: Recreate
     template:
       metadata:
         labels:
-          name: mongodb
+         deploymentConfig: mongodb
+         name: mongodb
       spec:
         containers:
           - env:
@@ -366,27 +363,29 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
-    annotations:
     labels:
       app: profile
     name: profile
   spec:
     replicas: 1
     selector:
-      app: profile
-      deploymentconfig: profile
+      name: profile
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
-          app: profile
-          deploymentconfig: profile
+          name: profile
+          deploymentConfig: profile
       spec:
         containers:
           - env:
               - name: JAVA_OPTIONS
                 value: '-Dspring.profiles.active=openshift'
+              - name: DATASTORE_HOST
+                value: ${DATASTORE_HOST}
+              - name: DATASTORE_PORT
+                value: ${DATASTORE_PORT}
             image: profile
             imagePullPolicy: Always
             name: profile
@@ -463,6 +462,19 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
+    name: mongodb
+  spec:
+    ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      deploymentConfig: mongodb
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
     name: profile
   spec:
     ports:
@@ -485,4 +497,13 @@ objects:
     to:
       kind: Service
       name: datagrid
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: profile
+  spec:
+    to:
+      kind: Service
+      name: profile
 
