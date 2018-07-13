@@ -1,6 +1,7 @@
 package com.redhat.user.service;
 
 import com.redhat.user.profile.Student;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -10,5 +11,6 @@ public interface StudentRepository extends MongoRepository<Student, String> {
 
     @Cacheable(value = "student", key = "#p0")
     Student findByUserId(String id);
-
+    @CacheEvict(value = "student", key = "#p0")
+    void deleteByUserId(String userId);
 }

@@ -35,6 +35,12 @@ public class UsersEndpoint implements Serializable {
     }
 
     @ResponseBody
+    @GetMapping("/tutors/{id}")
+    public ResponseEntity<Tutor> getTutor(@PathVariable("id") String id) {
+        return new ResponseEntity<>(tutorRepo.findByUserId(id), HttpStatus.OK);
+    }
+
+    @ResponseBody
     @GetMapping("/tutors")
     public ResponseEntity<List<Tutor>> listAllTutors() {
         return new ResponseEntity<>(tutorRepo.findAll(), HttpStatus.OK);
@@ -52,6 +58,16 @@ public class UsersEndpoint implements Serializable {
     }
 
     @ResponseBody
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") String id) {
+
+
+        studentRepo.deleteByUserId(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+
+    @ResponseBody
     @PostMapping("/tutors/{id}")
     public ResponseEntity<Void> addTutor(@RequestBody Tutor tutor) {
 
@@ -60,6 +76,14 @@ public class UsersEndpoint implements Serializable {
                 "/{id}").buildAndExpand(newTutor.getUserId()).toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/tutors/{id}")
+    public ResponseEntity<Void> deleteTutor(@PathVariable("id") String id) {
+        
+        tutorRepo.deleteByUserId(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }
