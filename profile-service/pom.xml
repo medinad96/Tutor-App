@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-remote</artifactId>
-            <version>9.1.7.Final</version>
+            <version>${version.infinispan}</version>
         </dependency>
 
         <dependency>

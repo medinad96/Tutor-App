@@ -19,13 +19,13 @@ public class DGService {
 
     public DGService() throws Exception {
 
-        Configuration config = new ConfigurationBuilder()
+        ConfigurationBuilder config = new ConfigurationBuilder()
                 .addServer()
                 .host("datagrid-hotrod")
                 .port(11333)
-                .build();
+                .marshaller(new ProtoStreamMarshaller());
 
-        cacheManager = new RemoteCacheManager(config);
+        cacheManager = new RemoteCacheManager(config.build());
 
         SerializationContext serCtx =
                 ProtoStreamMarshaller.getSerializationContext(cacheManager);
@@ -35,17 +35,19 @@ public class DGService {
         ProtoSchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder();
         String generatedSchema = protoSchemaBuilder
                 .fileName("tutor.proto")
-                .packageName("com.redhat.user")
+                .packageName("com.redhat.user.profile")
                 .addClass(User.class)
+                .addClass(Tutor.class)
+                .addClass(Student.class)
                 .build(serCtx);
 
         // the types can be marshalled now
-        System.out.println("Can we marshal? " + serCtx.canMarshall(User.class));
+        System.out.println("Can we marshal? " + serCtx.canMarshall(Student.class));
 
         // display the schema file
         System.out.println(generatedSchema);
 
-        cacheManager.getCache("foo");
+      //  cacheManager.getCache("foo");
 
     }
 

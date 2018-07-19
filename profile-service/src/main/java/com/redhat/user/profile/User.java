@@ -2,18 +2,31 @@ package com.redhat.user.profile;
 
 //import org.springframework.data.annotation.Id;
 
+import org.infinispan.protostream.annotations.ProtoField;
+import org.infinispan.protostream.annotations.ProtoMessage;
+import org.infinispan.protostream.descriptors.JavaType;
+import org.infinispan.protostream.descriptors.Type;
+
 import java.io.Serializable;
 
+@ProtoMessage(name = "AppUser")
 public class User implements Serializable {
 
     //@Id
-    private String userId;
-    private String userType;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    private String description;
+    @ProtoField(number = 1)
+    public String userId;
+    @ProtoField(number = 2)
+    public String userType;
+    @ProtoField(number = 3)
+    public String firstName;
+    @ProtoField(number = 4)
+    public String lastName;
+    @ProtoField(number = 5)
+    public String phoneNumber;
+    @ProtoField(number = 6)
+    public String email;
+    @ProtoField(number = 7)
+    public String description;
 
     public User() {
 

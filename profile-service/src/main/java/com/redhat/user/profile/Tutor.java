@@ -1,10 +1,15 @@
 package com.redhat.user.profile;
 
 
+import org.infinispan.protostream.annotations.ProtoField;
+
 public class Tutor extends User {
 
-    private String placeToMeet;
-    private String classesToHelp;
+
+    @ProtoField(number = 10)
+    public String placeToMeet;
+    @ProtoField(number = 11)
+    public String classesToHelp;
 
     public Tutor() {
 
