@@ -21,7 +21,7 @@ public class Student extends User {
     @Override
     public String toString() {
         return String.format(
-                "Tutor[userId=%s, userType='%s' firstName='%s', lastName='%s', phoneNumber='%s', email='%s', description='%s', placeToMeet='%s', classesToHelp='%s']",
+                "Student[userId=%s, userType='%s' firstName='%s', lastName='%s', phoneNumber='%s', email='%s', description='%s', placeToMeet='%s', classHelp='%s']",
                 getUserId(), getUserType(), getFirstName(), getLastName(), getPhoneNumber(),getEmail(),getDescription(), placeToMeet, classHelp);
     }
 

@@ -1,12 +1,12 @@
 package com.redhat.user.profile;
 
-import org.springframework.data.annotation.Id;
+//import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 
 public class User implements Serializable {
 
-    @Id
+    //@Id
     private String userId;
     private String userType;
     private String firstName;
