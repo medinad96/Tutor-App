@@ -150,6 +150,7 @@ objects:
           - name: OPENSHIFT_DNS_PING_SERVICE_NAME
             value: datagrid-ping
           - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+            value: 8888
           - name: INFINISPAN_CONNECTORS
             value: hotrod,rest
           - name: CACHE_NAMES
@@ -450,15 +451,20 @@ objects:
   kind: Service
   metadata:
     name: datagrid-ping
+    annotations:
+      description: The JGroups ping port for clustering.
+      service.alpha.kubernetes.io/tolerate-unready-endpoints: 'true'
   spec:
     ports:
     - port: 8888
+      name: ping
       protocol: TCP
       targetPort: 8888
     selector:
       deploymentConfig: datagrid
     sessionAffinity: None
-    type: ClusterIP
+    clusterIP: None
+
 - apiVersion: v1
   kind: Service
   metadata:
