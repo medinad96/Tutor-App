@@ -150,7 +150,7 @@ objects:
           - name: OPENSHIFT_DNS_PING_SERVICE_NAME
             value: datagrid-ping
           - name: OPENSHIFT_DNS_PING_SERVICE_PORT
-            value: 8888
+            value: "8888"
           - name: INFINISPAN_CONNECTORS
             value: hotrod,rest
           - name: CACHE_NAMES
@@ -314,13 +314,23 @@ objects:
       - type: ConfigChange
 
 #
-# Tutor App Profile Imagestream
+# Tutor App Imagestreams
 - apiVersion: v1
   kind: ImageStream
   metadata:
     name: profile
     labels:
       app: profile
+  spec:
+    tags:
+    - name: latest
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: reviews
+    labels:
+      app: reviews
   spec:
     tags:
     - name: latest
@@ -342,6 +352,36 @@ objects:
     runPolicy: Serial
     source:
       contextDir: profile-service
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_URI}
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'redhat-openjdk18-openshift:1.2'
+          namespace: openshift
+      type: Source
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: reviews
+    name: reviews
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: reviews:latest
+    runPolicy: Serial
+    source:
+      contextDir: reviews-service
       git:
         ref: ${GIT_REF}
         uri: ${GIT_URI}
@@ -415,6 +455,62 @@ objects:
           from:
             kind: ImageStreamTag
             name: 'profile:latest'
+        type: ImageChange
+
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: reviews
+    name: reviews
+  spec:
+    replicas: 1
+    selector:
+      name: reviews
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: reviews
+          deploymentConfig: reviews
+      spec:
+        containers:
+          - env:
+              - name: JAVA_OPTIONS
+                value: '-Dspring.profiles.active=openshift'
+              - name: DATASTORE_HOST
+                value: ${DATASTORE_HOST}
+              - name: DATASTORE_PORT
+                value: ${DATASTORE_PORT}
+            image: reviews
+            imagePullPolicy: Always
+            name: reviews
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+              - containerPort: 8443
+                protocol: TCP
+              - containerPort: 8778
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - reviews
+          from:
+            kind: ImageStreamTag
+            name: 'reviews:latest'
         type: ImageChange
 
 #
@@ -491,6 +587,19 @@ objects:
       deploymentConfig: profile
     sessionAffinity: None
     type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: reviews
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentConfig: reviews
+    sessionAffinity: None
+    type: ClusterIP
 
 #
 # Routes
@@ -512,4 +621,13 @@ objects:
     to:
       kind: Service
       name: profile
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: reviews
+  spec:
+    to:
+      kind: Service
+      name: reviews
 
