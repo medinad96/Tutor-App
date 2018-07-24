@@ -35,6 +35,9 @@ public class SearchEndPoint implements Serializable{
     public ResponseEntity<Void> addStudentSearch(@RequestBody Search search) {
 
         //search query for student repo
+        QueryFactory qf = Search.getQueryFactory(remoteCache);// how to get the remote cache to be the student cache?
+        Query query = qf.from(Student.class) // add search methods like .having()
+
 
 
     }

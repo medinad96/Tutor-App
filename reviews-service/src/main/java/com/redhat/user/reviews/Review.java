@@ -1,20 +1,31 @@
 package com.redhat.user.reviews;
 
+import org.infinispan.protostream.annotations.ProtoField;
+import org.infinispan.protostream.annotations.ProtoMessage;
+
+
+@ProtoMessage(name = "AppReview")
 public class Review {
 
-
-    private String reviewId;
-    private String reviewTitle;
-    private String reviewDescription;
-    private String reviewRating;
+    @ProtoField(number = 24)
+    public String reviewId;
+    @ProtoField(number = 25)
+    public String reviewAuthor;
+    @ProtoField(number = 26)
+    public String reviewTitle;
+    @ProtoField(number = 27)
+    public String reviewDescription;
+    @ProtoField(number = 28)
+    public String reviewRating;
 
 
     public Review(){
 
     }
 
-    public Review(String reviewId, String reviewTitle, String reviewDescription, String reviewRating) {
+    public Review(String reviewId,String reviewAuthor, String reviewTitle, String reviewDescription, String reviewRating) {
         this.reviewId = reviewId;
+        this.reviewAuthor = reviewAuthor;
         this.reviewTitle = reviewTitle;
         this.reviewDescription = reviewDescription;
         this.reviewRating = reviewRating;
@@ -24,7 +35,7 @@ public class Review {
     @Override
     public String toString() {
         return String.format(
-                "Tutor[reviewId=%s, reviewTitle='%s' reviewDescription='%s', reviewRating='%s']",
+                "Tutor[reviewId=%s, reviewAuthor=%s, reviewTitle='%s' reviewDescription='%s', reviewRating='%s']",
                 getReviewId(), getReviewTitle(), getReviewDescription(), getReviewRating());
     }
 
@@ -36,6 +47,14 @@ public class Review {
 
     public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
+    }
+
+    public String getReviewAuthor() {
+        return reviewAuthor;
+    }
+
+    public void setReviewAuthor(String reviewAuthor) {
+        this.reviewAuthor = reviewAuthor;
     }
 
     public String getReviewTitle() {

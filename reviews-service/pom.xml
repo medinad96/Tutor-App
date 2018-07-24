@@ -77,13 +77,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-remote</artifactId>
+            <version>${version.infinispan}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.0.0.redhat-1</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -98,7 +105,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>

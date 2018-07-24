@@ -2,6 +2,8 @@ package com.redhat.user;
 
 import com.redhat.user.profile.Student;
 import com.redhat.user.profile.Tutor;
+import com.redhat.user.profile.Srch;
+import com.redhat.user.profile.Srch;
 //import com.redhat.user.service.StudentRepository;
 //import com.redhat.user.service.TutorRepository;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -84,5 +86,11 @@ public class ProfileApplication {
 
         DEFAULT_TUTOR_LIST.add(new Tutor("2","Daniel","Med","2345678","dmedina@email.com","first student in list", "boston university","computer science, math, history"));
     }
+
+//    private static List<Srch> DEFAULT_SEARCH_LIST = new ArrayList<>();
+//    static{
+//        DEFAULT_SEARCH_LIST.add(new Srch("daniel"));
+//    }
+
 
 }

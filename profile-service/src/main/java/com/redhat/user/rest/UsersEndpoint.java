@@ -3,19 +3,29 @@ package com.redhat.user.rest;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.infinispan.client.hotrod.RemoteCache;
+import org.infinispan.client.hotrod.Search;
+import org.infinispan.query.dsl.QueryBuilder;
+import org.infinispan.query.dsl.QueryFactory;
+import org.infinispan.query.dsl.Query;
 
 import com.redhat.user.app.DGService;
 import com.redhat.user.profile.Student;
 import com.redhat.user.profile.Tutor;
+import com.redhat.user.profile.Srch;
 //import com.redhat.user.service.StudentRepository;
 //import com.redhat.user.service.TutorRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+
 
 @RestController
 public class UsersEndpoint implements Serializable {
@@ -103,6 +113,58 @@ public class UsersEndpoint implements Serializable {
         //tutorRepo.deleteByUserId(id);
         dgService.getTutors().remove(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/tutor-search")
+    public ResponseEntity<List<Tutor>> addTutorSearch(@RequestBody Srch search) {
+
+        //search query for student repo
+        RemoteCache<String, Tutor> cache = dgService.getTutors();
+        QueryFactory qf = Search.getQueryFactory(cache);// get the remote cache to be the tutor cache
+        QueryBuilder query = qf.from(Tutor.class); // add search methods like .having()
+        for (String keyword : search.getKeywords().split("\\s+")) {
+            query.having("firstName").like("%" + keyword + "%").or()
+                    .having("lastName").like("%" + keyword + "%").or()
+                    .having("phoneNumber").like("%" + keyword + "%").or()
+                    .having("email").like("%" + keyword + "%").or()
+                    .having("description").like("%" + keyword + "%").or()
+                    .having("placeToMeet").like("%" + keyword + "%").or()
+                    .having("userId").like("%" + keyword + "%").or()
+                    .having("classesToHelp").like("%" + keyword + "%");
+        }
+
+        List<Tutor> list = query.build().list();
+
+        return new ResponseEntity<List<Tutor>>(list, HttpStatus.OK);
+
+
+    }
+
+    @ResponseBody
+    @GetMapping("/student-search")
+    public ResponseEntity<List<Student>> addStudentSearch(@RequestBody Srch search) {
+
+        //search query for student
+        RemoteCache<String, Student> cache = dgService.getStudents();
+        QueryFactory qf = Search.getQueryFactory(cache);// get the remote cache to be the student cache
+        QueryBuilder query = qf.from(Student.class); // add search methods like .having()
+        for (String keyword : search.getKeywords().split("\\s+")) {
+            query.having("firstName").like("%" + keyword + "%").or()
+                    .having("lastName").like("%" + keyword + "%").or()
+                    .having("phoneNumber").like("%" + keyword + "%").or()
+                    .having("email").like("%" + keyword + "%").or()
+                    .having("description").like("%" + keyword + "%").or()
+                    .having("placeToMeet").like("%" + keyword + "%").or()
+                    .having("userId").like("%" + keyword + "%").or()
+                    .having("classHelp").like("%" + keyword + "%");
+        }
+
+        List<Student> list = query.build().list();
+
+        return new ResponseEntity<List<Student>>(list, HttpStatus.OK);
+
+
     }
 
 }

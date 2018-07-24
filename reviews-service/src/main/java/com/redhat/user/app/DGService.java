@@ -1,9 +1,9 @@
 package com.redhat.user.app;
-import com.redhat.user.profile.Student;
-import com.redhat.user.profile.Tutor;
-import com.redhat.user.profile.User;
-import org.infinispan.client.hotrod.RemoteCacheManager;
+
+import com.redhat.user.reviews.Review;
+
 import org.infinispan.client.hotrod.RemoteCache;
+import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.Configuration;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 import org.infinispan.client.hotrod.marshall.ProtoStreamMarshaller;
@@ -12,7 +12,6 @@ import org.infinispan.protostream.annotations.ProtoSchemaBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-
 @Component
 public class DGService {
 
@@ -36,34 +35,24 @@ public class DGService {
         ProtoSchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder();
         String generatedSchema = protoSchemaBuilder
                 .fileName("tutor.proto")
-                .packageName("com.redhat.user.profile")
-                .addClass(User.class)
-                .addClass(Tutor.class)
-                .addClass(Student.class)
+                .packageName("com.redhat.user.reviews")
+                .addClass(Review.class)
                 .build(serCtx);
 
         // the types can be marshalled now
-        System.out.println("Can we marshal? " + serCtx.canMarshall(Student.class));
+        System.out.println("Can we marshal? " + serCtx.canMarshall(Review.class));
 
         // display the schema file
         System.out.println(generatedSchema);
 
-      //  cacheManager.getCache("foo");
+        //  cacheManager.getCache("foo");
+
 
     }
 
-    public RemoteCache<String, Student> getStudents() {
-        return cacheManager.getCache("student");
+    public RemoteCache<String, Review> getReviews() {
+        return cacheManager.getCache("review");
     }
-
-    public RemoteCache<String, Tutor> getTutors() {
-        return cacheManager.getCache("tutor");
-    }
-
-
-
-
-
 
 
 }

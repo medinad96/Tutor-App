@@ -75,7 +75,7 @@ parameters:
   required: true
 - description: Datastore password
   name: DATASTORE_CACHE
-  value: "student,tutor"
+  value: "student,tutor,review"
   required: true
 # MongoDB
 - description: Database username
@@ -630,4 +630,3 @@ objects:
     to:
       kind: Service
       name: reviews
-
