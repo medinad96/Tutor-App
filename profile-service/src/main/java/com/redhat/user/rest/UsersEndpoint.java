@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.Search;
+import org.infinispan.query.dsl.FilterConditionContext;
 import org.infinispan.query.dsl.QueryBuilder;
 import org.infinispan.query.dsl.QueryFactory;
 import org.infinispan.query.dsl.Query;
@@ -109,7 +110,7 @@ public class UsersEndpoint implements Serializable {
     @ResponseBody
     @DeleteMapping("/tutors/{id}")
     public ResponseEntity<Void> deleteTutor(@PathVariable("id") String id) {
-        
+
         //tutorRepo.deleteByUserId(id);
         dgService.getTutors().remove(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -143,26 +144,41 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/student-search")
-    public ResponseEntity<List<Student>> addStudentSearch(@RequestBody Srch search) {
+    public ResponseEntity<List<Student>> addStudentSearch(@RequestParam(name = "q", defaultValue = "") String keywords) {
 
         //search query for student
         RemoteCache<String, Student> cache = dgService.getStudents();
         QueryFactory qf = Search.getQueryFactory(cache);// get the remote cache to be the student cache
         QueryBuilder query = qf.from(Student.class); // add search methods like .having()
-        for (String keyword : search.getKeywords().split("\\s+")) {
-            query.having("firstName").like("%" + keyword + "%").or()
-                    .having("lastName").like("%" + keyword + "%").or()
-                    .having("phoneNumber").like("%" + keyword + "%").or()
-                    .having("email").like("%" + keyword + "%").or()
-                    .having("description").like("%" + keyword + "%").or()
-                    .having("placeToMeet").like("%" + keyword + "%").or()
-                    .having("userId").like("%" + keyword + "%").or()
-                    .having("classHelp").like("%" + keyword + "%");
+
+        FilterConditionContext fc = null;
+
+        for (String keyword : keywords.split("\\s+")) {
+            if (fc != null) {
+                fc = fc.or().having("firstName").like("%" + keyword + "%").or()
+                        .having("lastName").like("%" + keyword + "%").or()
+                        .having("phoneNumber").like("%" + keyword + "%").or()
+                        .having("email").like("%" + keyword + "%").or()
+                        .having("description").like("%" + keyword + "%").or()
+                        .having("placeToMeet").like("%" + keyword + "%").or()
+                        .having("userId").like("%" + keyword + "%").or()
+                        .having("classHelp").like("%" + keyword + "%");
+            } else {
+                fc = query.having("firstName").like("%" + keyword + "%").or()
+                        .having("lastName").like("%" + keyword + "%").or()
+                        .having("phoneNumber").like("%" + keyword + "%").or()
+                        .having("email").like("%" + keyword + "%").or()
+                        .having("description").like("%" + keyword + "%").or()
+                        .having("placeToMeet").like("%" + keyword + "%").or()
+                        .having("userId").like("%" + keyword + "%").or()
+                        .having("classHelp").like("%" + keyword + "%");
+
+            }
         }
 
-        List<Student> list = query.build().list();
+        List<Student> list = fc.toBuilder().build().list();
 
-        return new ResponseEntity<List<Student>>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
 
 
     }

@@ -9,6 +9,7 @@ import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 import org.infinispan.client.hotrod.marshall.ProtoStreamMarshaller;
 import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.annotations.ProtoSchemaBuilder;
+import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -44,6 +45,14 @@ public class DGService {
 
         // the types can be marshalled now
         System.out.println("Can we marshal? " + serCtx.canMarshall(Student.class));
+
+        // register the schemas with the server too
+        RemoteCache<String, String> metadataCache = cacheManager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
+        metadataCache.put("tutor.proto", generatedSchema);
+        String errors = metadataCache.get(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX);
+        if (errors != null) {
+            throw new IllegalStateException("Some Protobuf schema files contain errors:\n" + errors);
+        }
 
         // display the schema file
         System.out.println(generatedSchema);
