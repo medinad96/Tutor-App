@@ -110,7 +110,7 @@ public class UsersEndpoint implements Serializable {
     @ResponseBody
     @DeleteMapping("/tutors/{id}")
     public ResponseEntity<Void> deleteTutor(@PathVariable("id") String id) {
-        
+
         //tutorRepo.deleteByUserId(id);
         dgService.getTutors().remove(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -159,7 +159,11 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/student-search")
+<<<<<<< HEAD
     public ResponseEntity<List<Student>> addStudentSearch(@RequestParam(value = "q", defaultValue = "") String keywords) {
+=======
+    public ResponseEntity<List<Student>> addStudentSearch(@RequestParam(name = "q", defaultValue = "") String keywords) {
+>>>>>>> 56d0783e032edd8199b51f20da2c13720090f912
 
         //search query for student
         RemoteCache<String, Student> cache = dgService.getStudents();
@@ -191,7 +195,7 @@ public class UsersEndpoint implements Serializable {
             }
         }
 
-        List<Student> list = query.build().list();
+        List<Student> list = fc.toBuilder().build().list();
 
         return new ResponseEntity<>(list, HttpStatus.OK);
 
