@@ -17,7 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
+@RestController
 public class ReviewsEndPoint implements Serializable {
 
 //    @Autowired
