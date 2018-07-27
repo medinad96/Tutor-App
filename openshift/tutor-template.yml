@@ -75,7 +75,7 @@ parameters:
   required: true
 - description: Datastore password
   name: DATASTORE_CACHE
-  value: "student,tutor,review"
+  value: "student,tutor,review,appointment"
   required: true
 # MongoDB
 - description: Database username
@@ -335,6 +335,16 @@ objects:
     tags:
     - name: latest
 
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: appointments
+      labels:
+        app: appointments
+    spec:
+      tags:
+      - name: latest
+
 #
 # Tutor App Profile Service Build
 #
@@ -513,6 +523,63 @@ objects:
             name: 'reviews:latest'
         type: ImageChange
 
+
+apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: appointments
+    name: appointments
+  spec:
+    replicas: 1
+    selector:
+      name: appointments
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: appointments
+          deploymentConfig: appointments
+      spec:
+        containers:
+          - env:
+              - name: JAVA_OPTIONS
+                value: '-Dspring.profiles.active=openshift'
+              - name: DATASTORE_HOST
+                value: ${DATASTORE_HOST}
+              - name: DATASTORE_PORT
+                value: ${DATASTORE_PORT}
+            image: appointments
+            imagePullPolicy: Always
+            name: appointments
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+              - containerPort: 8443
+                protocol: TCP
+              - containerPort: 8778
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - appointments
+          from:
+            kind: ImageStreamTag
+            name: 'reviews:latest'
+        type: ImageChange
+
 #
 # Services
 #
@@ -601,6 +668,20 @@ objects:
     sessionAffinity: None
     type: ClusterIP
 
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: appointments
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentConfig: appointments
+    sessionAffinity: None
+    type: ClusterIP
+
 #
 # Routes
 #
@@ -630,3 +711,12 @@ objects:
     to:
       kind: Service
       name: reviews
+
+  apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: appointments
+    spec:
+      to:
+        kind: Service
+        name: appointments

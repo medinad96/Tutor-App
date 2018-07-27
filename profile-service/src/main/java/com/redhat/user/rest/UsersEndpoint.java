@@ -149,7 +149,7 @@ public class UsersEndpoint implements Serializable {
             }
         }
 
-        List list = query.build().list();
+        List<Tutor> list = fc.toBuilder().build().list();
 
         return new ResponseEntity<List<Tutor>>(list, HttpStatus.OK);
 
