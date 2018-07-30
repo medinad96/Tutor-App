@@ -335,15 +335,15 @@ objects:
     tags:
     - name: latest
 
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: appointments
-      labels:
-        app: appointments
-    spec:
-      tags:
-      - name: latest
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: appointments
+    labels:
+      app: appointments
+  spec:
+    tags:
+    - name: latest
 
 #
 # Tutor App Profile Service Build
@@ -392,6 +392,36 @@ objects:
     runPolicy: Serial
     source:
       contextDir: reviews-service
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_URI}
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'redhat-openjdk18-openshift:1.2'
+          namespace: openshift
+      type: Source
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: appointments
+    name: appointments
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: appointments:latest
+    runPolicy: Serial
+    source:
+      contextDir: scheduling-service
       git:
         ref: ${GIT_REF}
         uri: ${GIT_URI}
@@ -524,7 +554,7 @@ objects:
         type: ImageChange
 
 
-apiVersion: apps.openshift.io/v1
+- apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
     labels:
@@ -577,7 +607,7 @@ apiVersion: apps.openshift.io/v1
             - appointments
           from:
             kind: ImageStreamTag
-            name: 'reviews:latest'
+            name: 'appointments:latest'
         type: ImageChange
 
 #
@@ -712,11 +742,11 @@ apiVersion: apps.openshift.io/v1
       kind: Service
       name: reviews
 
-  apiVersion: route.openshift.io/v1
-    kind: Route
-    metadata:
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: appointments
+  spec:
+    to:
+      kind: Service
       name: appointments
-    spec:
-      to:
-        kind: Service
-        name: appointments
