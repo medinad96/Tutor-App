@@ -53,7 +53,7 @@ public class SchedulingApplication {
     private static List<Appointment> DEFAULT_APPOINTMENT_LIST = new ArrayList<>();
     static {
 
-        DEFAULT_APPOINTMENT_LIST.add(new Appointment("1","Daniel","David","first appointment","first appointment ever","Approved"));
+        DEFAULT_APPOINTMENT_LIST.add(new Appointment("1","Daniel","David","first appointment","12:30pm","07/31/2018","first appointment ever","Approved"));
     }
 
 

@@ -16,8 +16,12 @@ public class Appointment {
     @ProtoField(number = 33)
     public String appointmentTitle;
     @ProtoField(number = 34)
-    public String appointmentDescription;
+    public String appointmentTime;
     @ProtoField(number = 35)
+    public String appointmentDate;
+    @ProtoField(number = 36)
+    public String appointmentDescription;
+    @ProtoField(number = 37)
     public String appointmentStatus;
 
 
@@ -25,11 +29,13 @@ public class Appointment {
 
     }
 
-    public Appointment(String appointmentId, String appointmentAuthor, String appointmentRecipient, String appointmentTitle, String appointmentDescription, String appointmentStatus) {
+    public Appointment(String appointmentId, String appointmentAuthor, String appointmentRecipient, String appointmentTitle, String appointmentTime, String appointmentDate, String appointmentDescription, String appointmentStatus) {
         this.appointmentId = appointmentId;
         this.appointmentAuthor = appointmentAuthor;
         this.appointmentRecipient = appointmentRecipient;
         this.appointmentTitle = appointmentTitle;
+        this.appointmentTime = appointmentTime;
+        this.appointmentDate = appointmentDate;
         this.appointmentDescription = appointmentDescription;
         this.appointmentStatus = appointmentStatus;
     }
@@ -38,10 +44,9 @@ public class Appointment {
     @Override
     public String toString() {
         return String.format(
-                "Tutor[appointmentId=%s, appointmentAuthor=%s, appointmentRecipient=%s, appointmentTitle='%s' appointmentDescription='%s', appointmentStatus='%s']",
-                getAppointmentId(), getAppointmentTitle(),getAppointmentAuthor(),getAppointmentRecipient(), getAppointmentDescription(), getAppointmentStatus());
+                "Appointment[appointmentId=%s, appointmentAuthor=%s, appointmentRecipient=%s, appointmentTitle='%s', appointmentTime='%s' , appointmentDate='%s' , appointmentDescription='%s', appointmentStatus='%s']",
+                getAppointmentId(), getAppointmentTitle(), getAppointmentTime(),getAppointmentDate(), getAppointmentAuthor(),getAppointmentRecipient(), getAppointmentDescription(), getAppointmentStatus());
     }
-
 
 
     public String getAppointmentId() {
@@ -66,6 +71,22 @@ public class Appointment {
 
     public void setAppointmentTitle(String appointmentTitle) {
         this.appointmentTitle = appointmentTitle;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
     }
 
     public String getAppointmentDescription() {
