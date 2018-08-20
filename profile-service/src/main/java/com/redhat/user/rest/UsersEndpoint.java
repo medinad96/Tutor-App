@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @RestController
@@ -41,6 +41,7 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/students")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Student>> listAllStudents() {
 
         Map<String, Student> cache = dgService.getStudents();
