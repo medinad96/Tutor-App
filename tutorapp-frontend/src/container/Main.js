@@ -7,7 +7,7 @@ class Main extends Component {
 
   constructor(props) {
   super(props);
-  this.state = {ponged: 'Not Ponged'}
+  this.state = {students: []};
   this.ping = this.ping.bind(this);
   }
 
@@ -16,7 +16,8 @@ class Main extends Component {
 
     console.log(res);
     alert("Received Successful response from server!");
-    this.setState({ponged: res.data[0].firstName+" "+res.data[0].lastName});
+    const students = res.data.map(stu => ({FirstName: stu.firstName, LastName: stu.LastName}));
+    this.setState({students});//[0].firstName+" "+res.data[0].lastName});
   }, err => {
     alert("Server rejected response with: " + err);
   });
@@ -24,17 +25,31 @@ class Main extends Component {
 
 
   render() {
+
+  //const {students} = this.state.ponged;
   return (
     <div className="Main">
       <header className="App-header">
-        <h1 className="App-title">Ping</h1>
+        <h1 className="App-title">Student List from Microservice on Openshift</h1>
       </header>
-      <p className="App-intro">
+      <div className="App-intro">
         <div>
-          <button onClick={this.ping}>Ping!</button>
-          <div>Ponged: {this.state.ponged}</div>
-        </div>
-      </p>
+          <button onClick={this.ping}>PRINT STUDENTS!</button>
+          <div>
+
+          <h2>Student List</h2>
+          {
+            this.state.students.map(
+              (student,index) =>
+                <div key={index} >
+                  <h3>In loop</h3>
+                  <li>{student.firstName} </li>
+                  <li>{student.lastName} </li>
+                </div>
+            )}
+          </div>
+         </div>
+      </div>
     </div>
   );
   }
