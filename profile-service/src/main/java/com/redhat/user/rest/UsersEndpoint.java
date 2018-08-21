@@ -53,17 +53,20 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/students/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Student> getStudent(@PathVariable("id") String id) {
         return new ResponseEntity<>(dgService.getStudents().get(id), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/tutors/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Tutor> getTutor(@PathVariable("id") String id) {
         return new ResponseEntity<>(dgService.getTutors().get(id), HttpStatus.OK);
     }
 
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/tutors")
     public ResponseEntity<List<Tutor>> listAllTutors() {
 

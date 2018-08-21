@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../assets/logo.svg';
+//import logo from '../assets/logo.svg';
 import axios from 'axios'
 import '../css/App.css';
 
@@ -16,7 +16,7 @@ class Main extends Component {
 
     console.log(res);
     alert("Received Successful response from server!");
-    const students = res.data.map(stu => ({FirstName: stu.firstName, LastName: stu.LastName}));
+    const students = res.data.map(stu => ({FirstName: stu.firstName, LastName: stu.lastName,Email: stu.email,PhoneNumber: stu.phoneNumber, UserType: stu.userType }));
     this.setState({students});//[0].firstName+" "+res.data[0].lastName});
   }, err => {
     alert("Server rejected response with: " + err);
@@ -38,15 +38,16 @@ class Main extends Component {
           <div>
 
           <h2>Student List</h2>
-          {
+          <div>{
             this.state.students.map(
-              (student,index) =>
+              (stu,index) =>
                 <div key={index} >
-                  <h3>In loop</h3>
-                  <li>{student.firstName} </li>
-                  <li>{student.lastName} </li>
+                  <ul>{stu.UserType}: {stu.FirstName} {stu.LastName}</ul>
+                  <ul>Email: {stu.Email} </ul>
+                  <ul>Phone: {stu.PhoneNumber} </ul>
                 </div>
             )}
+            </div>
           </div>
          </div>
       </div>
