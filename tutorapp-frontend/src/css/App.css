@@ -8,10 +8,49 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #339FFF;
   height: 60px;
   padding: 20px;
   color: white;
+}
+
+.sl_button {
+  class: btn btn-primary;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.btn{
+  margin-top: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  background-color: #0A54F1;
+
+}
+
+.user-headline{
+  font: bold 18px/1.5 Helvetica, Verdana, sans-serif;
+  margin-top: .3em;
+}
+
+.user-item:hover {
+  background: #eee;
+  overflow: auto;
+
+}
+.user-list{
+  padding: 0;
+}
+.user-item{
+  width: auto;
+  padding-left: 0;
+  margin-bottom: 0;
+
+}
+
+.user-item p{
+  font: 200 14px/1.5 Gerogia, Times New Roman, serif;
+  margin-bottom: 1em;
 }
 
 .App-title {

@@ -34,19 +34,24 @@ class Tutor extends Component {
       </header>
       <div className="App-intro">
         <div>
-          <button onClick={this.pingt}>PRINT TUTORS!</button>
-          <div>
+          <button className="btn btn-primary" onClick={this.pingt}>PRINT TUTORS!</button>
+        <div>
 
-          <h2>Tutor List</h2>
-          <div>{
+
+          <div>
+          <ul className="user-list">
+
+          {
             this.state.tutors.map(
               (tu,index) =>
-                <div key={index} >
-                  <ul>{tu.UserType}: {tu.FirstName} {tu.LastName}</ul>
-                  <ul>Email: {tu.Email} </ul>
-                  <ul>Phone: {tu.PhoneNumber} </ul>
-                </div>
+                <ul className="user-item" key={index} >
+                  <h4 className="user-headline">{tu.UserType.charAt(0).toUpperCase()+tu.UserType.slice(1)}: {tu.FirstName} {tu.LastName}</h4>
+                  <p>Email: {tu.Email} </p>
+                  <p>Phone: {tu.PhoneNumber} </p>
+                </ul>
             )}
+
+            </ul>
             </div>
           </div>
          </div>

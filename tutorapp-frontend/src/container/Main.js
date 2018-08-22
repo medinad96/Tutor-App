@@ -34,19 +34,23 @@ class Main extends Component {
       </header>
       <div className="App-intro">
         <div>
-          <button onClick={this.ping}>PRINT STUDENTS!</button>
+          <button className="btn btn-primary"  onClick={this.ping}>PRINT STUDENTS!</button>
           <div>
 
-          <h2>Student List</h2>
-          <div>{
+
+          <div>
+          <ul className="user-list">
+          {
             this.state.students.map(
               (stu,index) =>
-                <div key={index} >
-                  <ul>{stu.UserType}: {stu.FirstName} {stu.LastName}</ul>
-                  <ul>Email: {stu.Email} </ul>
-                  <ul>Phone: {stu.PhoneNumber} </ul>
-                </div>
+                <ul className="user-item" key={index} >
+
+                  <h4 className="user-headline">{stu.UserType.charAt(0).toUpperCase()+stu.UserType.slice(1)}: {stu.FirstName} {stu.LastName}</h4>
+                  <p>Email: {stu.Email} </p>
+                  <p>Phone: {stu.PhoneNumber} </p>
+                </ul>
             )}
+            </ul>
             </div>
           </div>
          </div>
