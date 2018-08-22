@@ -12,6 +12,12 @@
   height: 60px;
   padding: 20px;
   color: white;
+
+}
+
+.App-title{
+  font: 20px Helvetica, Verdana, sans-serif;
+
 }
 
 .sl_button {
@@ -37,6 +43,7 @@
   background: #eee;
   overflow: auto;
 
+
 }
 .user-list{
   padding: 0;
@@ -45,12 +52,33 @@
   width: auto;
   padding-left: 0;
   margin-bottom: 0;
+  border-radius: 10px;
 
 }
 
+.user-item2{
+  width: auto;
+  padding-left: 0;
+  margin-bottom: 0;
+  border-radius: 10px;
+
+}
+
+
+
 .user-item p{
-  font: 200 14px/1.5 Gerogia, Times New Roman, serif;
+  font: 200 14px/1.5 Helvetica, Times New Roman, serif;
   margin-bottom: 1em;
+}
+
+.user-item2 p{
+  font: 200 14px/1.5 Helvetica, Times New Roman, serif;
+  margin-bottom: 1em;
+  font-weight: bold;
+}
+
+.bold-p{
+  font-weight: bold;
 }
 
 .App-title {
