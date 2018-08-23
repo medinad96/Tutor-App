@@ -78,6 +78,7 @@ public class UsersEndpoint implements Serializable {
     }
 
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/students/{id}")
     public ResponseEntity<Void> addStudent(@RequestBody Student student) {
 
@@ -90,6 +91,7 @@ public class UsersEndpoint implements Serializable {
     }
 
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("/students/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable("id") String id) {
 
@@ -100,6 +102,7 @@ public class UsersEndpoint implements Serializable {
 
 
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/tutors/{id}")
     public ResponseEntity<Void> addTutor(@RequestBody Tutor tutor) {
 
@@ -112,6 +115,7 @@ public class UsersEndpoint implements Serializable {
     }
 
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("/tutors/{id}")
     public ResponseEntity<Void> deleteTutor(@PathVariable("id") String id) {
 

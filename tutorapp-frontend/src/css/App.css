@@ -42,17 +42,18 @@
 .user-item:hover {
   background: #eee;
   overflow: auto;
-
-
 }
+
 .user-list{
   padding: 0;
 }
+
 .user-item{
   width: auto;
   padding-left: 0;
   margin-bottom: 0;
   border-radius: 10px;
+  margin-top: 10px;
 
 }
 
@@ -64,9 +65,21 @@
 
 }
 
+.studentForm-item {
+  width: auto;
+  padding-left: 0;
+  margin-bottom: 0;
+  border-radius: 10px;
+  margin-top: 10px;
 
+}
 
 .user-item p{
+  font: 200 14px/1.5 Helvetica, Times New Roman, serif;
+  margin-bottom: 1em;
+}
+
+.studentForm-item p{
   font: 200 14px/1.5 Helvetica, Times New Roman, serif;
   margin-bottom: 1em;
 }
