@@ -9,6 +9,7 @@ class TutorProfile extends Component {
   super(props);
   this.state = {tutor: []};
   this.ping = this.ping.bind(this);
+  this.deleteTutor = this.deleteTutor.bind(this);
   }
 
   ping() {
@@ -18,7 +19,7 @@ class TutorProfile extends Component {
     //alert("Received Successful response from server!");
     const tu = res.data;
     const tutor = [
-    {FirstName: tu.firstName, LastName: tu.lastName,Email: tu.email,PhoneNumber: tu.phoneNumber, UserType: tu.userType , ClassesToHelp: tu.classesToHelp, Description: tu.description, PlaceToMeet: tu.placeToMeet }];
+    {TutorId: tu.userId, FirstName: tu.firstName, LastName: tu.lastName,Email: tu.email,PhoneNumber: tu.phoneNumber, UserType: tu.userType , ClassesToHelp: tu.classesToHelp, Description: tu.description, PlaceToMeet: tu.placeToMeet }];
     this.setState({tutor});//[0].firstName+" "+res.data[0].lastName});
   }, err => {
     alert("Server rejected response with: " + err);
@@ -27,6 +28,17 @@ class TutorProfile extends Component {
 
   componentDidMount(){
     this.ping();
+  }
+
+  deleteTutor(){
+    const uid = this.state.tutor[0].TutorId;
+    //console.log("USER ID: "+uid);
+    axios.delete("http://profile-tutor4.apps.18.207.166.134.nip.io/tutors/"+uid)
+      .then(res => {
+
+        console.log(res);
+        console.log(res.data);
+    })
   }
 
 
@@ -39,8 +51,6 @@ class TutorProfile extends Component {
         <h1 className="App-title">Tutor Profile from Microservice on Openshift</h1>
       </header>
       <div className="App-intro">
-
-
 
           <div>
           <ul className="user-list">
@@ -59,6 +69,8 @@ class TutorProfile extends Component {
                 </ul>
             )}
             </ul>
+            <button className="btn btn-danger" onClick={this.deleteTutor}>DELETE!</button>
+
             </div>
           </div>
 

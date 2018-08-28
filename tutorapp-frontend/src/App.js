@@ -4,6 +4,7 @@ import Tutor from './container/Tutor';
 import StudentProfile from './container/StudentProfile';
 import TutorProfile from './container/TutorProfile';
 import NewStudent from './container/NewStudentForm';
+import NewTutor from './container/NewTutorForm';
 import './css/App.css';
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
         <div><StudentProfile/></div>
         <div><TutorProfile/></div>
         <div><NewStudent/></div>
+        <div><NewTutor/></div>
       </div>
     );
   }

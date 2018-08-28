@@ -3,11 +3,11 @@ import axios from 'axios';
 import '../css/App.css';
 
 
-    class NewStudent extends Component {
+    class NewTutor extends Component {
       constructor() {
         super();
         this.state = {
-          userType: 'student',
+          userType: 'tutor',
           userId: '',
           placeToMeet: '',
           phoneNumber: '',
@@ -27,7 +27,7 @@ import '../css/App.css';
 
       resetState(){
         this.setState({
-          userType: 'student',
+          userType: 'tutor',
           userId: '',
           placeToMeet: '',
           phoneNumber: '',
@@ -35,7 +35,7 @@ import '../css/App.css';
           firstName: '',
           email: '',
           description: '',
-          classHelp: '',
+          classesToHelp: '',
         });
 
       }
@@ -44,10 +44,10 @@ import '../css/App.css';
         e.preventDefault();
         // get our form data out of state
 
-        const { userType, userId, placeToMeet, phoneNumber, lastName, firstName, email, description, classHelp } = this.state;
-        const sendJson = {classHelp, description, email, firstName, lastName, phoneNumber, placeToMeet, userId, userType};
+        const { userType, userId, placeToMeet, phoneNumber, lastName, firstName, email, description, classesToHelp } = this.state;
+        const sendJson = {classesToHelp, description, email, firstName, lastName, phoneNumber, placeToMeet, userId, userType};
 
-        axios.post('http://profile-tutor4.apps.18.207.166.134.nip.io/students/'+userId, sendJson)
+        axios.post('http://profile-tutor4.apps.18.207.166.134.nip.io/tutors/'+userId, sendJson)
           .then((result) => {
             //access the results here....
             console.log(result);
@@ -57,14 +57,13 @@ import '../css/App.css';
 
       }
 
-
       render() {
-        const { userType, userId, placeToMeet, phoneNumber, lastName, firstName, email, description, classHelp } = this.state;
+        const { userType, userId, placeToMeet, phoneNumber, lastName, firstName, email, description, classesToHelp } = this.state;
         return (
 
           <div className="Main">
             <header className="App-header">
-              <h1 className="App-title">New Student Form:</h1>
+              <h1 className="App-title">New Tutor Form:</h1>
             </header>
 
             <div className="App-intro">
@@ -75,7 +74,7 @@ import '../css/App.css';
                   <p>Last Name: <input type="text" name="lastName" value={lastName} onChange={this.onChange} /></p>
                   <p>Email: <input type="text" name="email" value={email} onChange={this.onChange} /></p>
                   <p>Phone #: <input type="text" name="phoneNumber" value={phoneNumber} onChange={this.onChange} /></p>
-                  <p>Classes I need help with: <input type="text" name="classHelp" value={classHelp} onChange={this.onChange} /></p>
+                  <p>Classes I need help with: <input type="text" name="classesToHelp" value={classesToHelp} onChange={this.onChange} /></p>
                   <p>Prefer to meet at: <input type="text" name="placeToMeet" value={placeToMeet} onChange={this.onChange} /></p>
                   <p>Description: <input type="text" name="description" value={description} onChange={this.onChange} /></p>
                   <button className="btn btn-success" type="submit">Submit</button>
@@ -88,4 +87,4 @@ import '../css/App.css';
       }
     }
 
-export default NewStudent;
+export default NewTutor;
