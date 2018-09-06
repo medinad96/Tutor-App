@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class ReviewsEndPoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/reviews")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Review>> listAllReviews() {
         Map<String, Review> cache = dgService.getReviews();
 
@@ -39,6 +41,7 @@ public class ReviewsEndPoint implements Serializable {
 
     @ResponseBody
     @PostMapping("/reviews/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Void> addReview(@RequestBody Review review) {
 
         dgService.getReviews().put(review.getReviewId(),review); //studentRepo.insert(student);
@@ -52,8 +55,20 @@ public class ReviewsEndPoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/reviews/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Review> getReview(@PathVariable("id") String id) {
         return new ResponseEntity<>(dgService.getReviews().get(id), HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @DeleteMapping("/reviews/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") String id) {
+
+        //tutorRepo.deleteByUserId(id);
+        dgService.getReviews().remove(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }

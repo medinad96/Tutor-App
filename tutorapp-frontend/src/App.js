@@ -5,6 +5,9 @@ import StudentProfile from './container/StudentProfile';
 import TutorProfile from './container/TutorProfile';
 import NewStudent from './container/NewStudentForm';
 import NewTutor from './container/NewTutorForm';
+import ReviewList from './review-frontend/ReviewList';
+import ReviewForm from './review-frontend/ReviewForm';
+import AppointmentList from './scheduling-frontend/AppointmentList';
 import './css/App.css';
 
 class App extends Component {
@@ -18,6 +21,9 @@ class App extends Component {
         <div><TutorProfile/></div>
         <div><NewStudent/></div>
         <div><NewTutor/></div>
+        <div><ReviewList/></div>
+        <div><ReviewForm/></div>
+        <div><AppointmentList/></div>
       </div>
     );
   }

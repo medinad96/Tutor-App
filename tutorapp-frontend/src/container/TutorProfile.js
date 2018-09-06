@@ -74,7 +74,6 @@ class TutorProfile extends Component {
             </div>
           </div>
 
-
     </div>
   );
   }

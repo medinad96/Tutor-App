@@ -57,28 +57,6 @@ class StudentProfile extends Component {
 
   }
 
-  //currentState(){
-    //const {studentId,firstName,lastName,email,phoneNumber,userType,classHelp,description,placeToMeet} = {this.state.student[0].StudentId,this.state.student[0].FirstName,this.state.student[0].LastName, this.state.student[0].Email, this.state.student[0].PhoneNumber,this. state.student[0].UserType, this.state.student[0].ClassHelp, this.state.student[0].Description,this.state.student[0].PlaceToMeet};
-
-
-    // let studentId = this.state.student[0].StudentId;
-    // let firstName = this.state.student[0].FirstName;
-    // let lastName = this.state.student[0].LastName;
-    // let email = this.state.student[0].Email;
-    // let phoneNumber = this.state.student[0].PhoneNumber;
-    // let userType = this.state.student[0].UserType;
-    // let classHelp = this.state.student[0].ClassHelp;
-    // let description = this.state.student[0].Description;
-    // let placeToMeet = this.state.student[0].PlaceToMeet;
-
-    // const stateJson = {studentId,firstName,lastName,email,phoneNumber,userType,classHelp,description,placeToMeet};
-    //
-    // this.setState([{stateJson}]);
-    // //console.log(stateJson);//{studentId,firstName,lastName,email,phoneNumber,userType,classHelp,description,placeToMeet});
-    //
-    //
-    // return(stateJson);
-  //}
 
   resetState(){
     this.setState({
@@ -104,7 +82,7 @@ class StudentProfile extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // get our form data out of state
+    // get form data out of state
 
     const { userType, userId, placeToMeet, phoneNumber, lastName, firstName, email, description, classHelp } = this.state;
     const sendJson = {classHelp, description, email, firstName, lastName, phoneNumber, placeToMeet, userId, userType};
@@ -120,24 +98,17 @@ class StudentProfile extends Component {
   }
 
 
-
   componentDidMount(){
     this.ping();
-    //const cst = this.currentState();
+
   }
 
 
   render() {
 
-  //console.log(this.state);
-
-
   const {classHelp, description, email, firstName, lastName, phoneNumber, placeToMeet, userId, userType} = this.state;
 
-  //const {classHelp, description, email, firstName, lastName, phoneNumber, placeToMeet, userId, userType} ={};
 
-
-  //const {students} = this.state.ponged;
   const stu = this.state;
 
   return (
