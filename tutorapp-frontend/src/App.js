@@ -8,6 +8,8 @@ import NewTutor from './container/NewTutorForm';
 import ReviewList from './review-frontend/ReviewList';
 import ReviewForm from './review-frontend/ReviewForm';
 import AppointmentList from './scheduling-frontend/AppointmentList';
+import AppointmentForm from './scheduling-frontend/AppointmentForm';
+import UpdateAppointment from './scheduling-frontend/UpdateAppointment';
 import './css/App.css';
 
 class App extends Component {
@@ -24,6 +26,8 @@ class App extends Component {
         <div><ReviewList/></div>
         <div><ReviewForm/></div>
         <div><AppointmentList/></div>
+        <div><AppointmentForm/></div>
+        <div><UpdateAppointment/></div>
       </div>
     );
   }
