@@ -10,6 +10,9 @@ import ReviewForm from './review-frontend/ReviewForm';
 import AppointmentList from './scheduling-frontend/AppointmentList';
 import AppointmentForm from './scheduling-frontend/AppointmentForm';
 import UpdateAppointment from './scheduling-frontend/UpdateAppointment';
+import StudentSearch from './search-frontend/StudentSearch';
+import TutorSearch from './search-frontend/TutorSearch';
+
 import './css/App.css';
 
 class App extends Component {
@@ -28,6 +31,8 @@ class App extends Component {
         <div><AppointmentList/></div>
         <div><AppointmentForm/></div>
         <div><UpdateAppointment/></div>
+        <div><StudentSearch/></div>
+        <div><TutorSearch/></div>
       </div>
     );
   }

@@ -126,6 +126,7 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/tutor-search")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Tutor>> addTutorSearch(@RequestParam(value = "q", defaultValue = "") String keywords) {
 
         //search query for student repo
@@ -167,7 +168,7 @@ public class UsersEndpoint implements Serializable {
 
     @ResponseBody
     @GetMapping("/student-search")
-
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Student>> addStudentSearch(@RequestParam(value = "q", defaultValue = "") String keywords) {
 
 
