@@ -62,6 +62,17 @@
                 <artifactId>infinispan-spring-boot-starter</artifactId>
                 <version>${version.infinispan.starter}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>4.4.0.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -74,6 +85,17 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter-remote</artifactId>
             <version>${version.infinispan.starter}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.0.5.RELEASE</version>
         </dependency>
 
         <dependency>

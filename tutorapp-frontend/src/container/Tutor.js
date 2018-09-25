@@ -28,6 +28,7 @@ class Tutor extends Component {
 
   //const {students} = this.state.ponged;
   return (
+
     <div className="Tutor">
       <header className="App-header">
         <h1 className="App-title">Tutor List from Microservice on Openshift</h1>
@@ -57,6 +58,7 @@ class Tutor extends Component {
          </div>
       </div>
     </div>
+    
   );
   }
 
