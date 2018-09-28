@@ -87,9 +87,11 @@
             <version>${version.infinispan.starter}</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <artifactId>keycloak-spring-boot-2-starter</artifactId>
+            <version>4.0.0.Final</version>
         </dependency>
 
         <dependency>
